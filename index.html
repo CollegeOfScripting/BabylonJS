@@ -1,19 +1,213 @@
 <!-- Dedicated to God the Father -->
 
-<!-- All Rights Reserved Christopher Topalian Copyright 2000-2022 -->
+<!-- All Rights Reserved Christopher Topalian 2000-2022 Copyright -->
+
 <!-- https://github.com/ChristopherTopalian -->
+
+<!-- https://github.com/ChristopherTopalian/Topalian_BabylonJS -->
+
 <!-- https://github.com/CollegeOfScripting -->
 
-<!-- index.html -->
+<!-- Topalian_BabylonJS_Object_Moves_Right_001.html -->
+
+<!--
+We create a scene.
+We create a camera in our scene.
+We create two lights in our scene.
+We make a cube in our scene.
+We color the cube.
+We make our camera follow the cube.
+We make a ground in our scene.
+We color the ground.
+The cube moves to the right at a constant rate.
+The camera follows the cube.
+-->
+
+<!-- Video of the Script Running in the Browser https://www.youtube.com/watch?v=zHm4BgIrCOM -->
 
 <html>
 <head>
-<title> BabylonJS </title>
+
+<!-- internet source for the engine file -->
+
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/babylonjs/5.30.0/babylon.js"></script>
+
+<!-- local source for the engine file -->
+<!--
+<script src = "../js/babylon_min.js"></script>
+-->
+
+<title> Topalian JavaScript - 3D </title>
+
+<style>
+
+html
+{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+body
+{
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+#theCanvas
+{
+    width: 100%;
+    height: 100%;
+}
+
+</style>
+
 </head>
 
 <body>
 
-JavaScript 3D
+<canvas id = "theCanvas"></canvas>
+
+<script>
+
+// get the canvas element
+let canvas = document.getElementById("theCanvas");
+
+// create the Babylon 3D Engine
+let engine = new BABYLON.Engine(canvas, true);
+
+// scene creation
+let createScene = function()
+{
+    // create the scene
+    let scene = new BABYLON.Scene(engine);
+
+    //////////////////////////
+
+    // create a camera in the scene
+    let camera001 = new BABYLON.ArcRotateCamera("Camera001", Math.PI / 2, 15 * Math.PI / 32, 25, BABYLON.Vector3.Zero(), scene);
+
+    // attach camera001 to the canvas
+    camera001.attachControl(canvas, true);
+
+    //////////////////////////
+
+    // create a light in the scene
+    let light001 = new BABYLON.HemisphericLight("Light001", new BABYLON.Vector3(1, 0, 0), scene);
+
+    light001.intensity = 0.8;
+    light001.range = 100;
+
+    // turn light001 off
+    // light001.setEnabled(false); // true for on
+
+    // create a light in the scene
+    let light002 = new BABYLON.PointLight("Light002", new BABYLON.Vector3(0, 1, -1), scene);
+
+    light002.intensity = 0.8;
+    light002.range = 100;
+
+    // turn light002 off
+    // light002.setEnabled(false); // true for on
+
+    //////////////////////////
+
+    // create a cube
+    let box001 = BABYLON.MeshBuilder.CreateBox("Box001",
+    {
+        width: 2.0,
+        height: 2.0,
+        depth: 2.0
+    }, scene);
+
+    // make camera001 follow box001
+    camera001.target = box001;
+
+    // set box001 x position to 0.0
+    box001.position.x = 0.0;
+
+    // set box001 y position to 1.5
+    box001.position.y = 1.5;
+
+    //////////////////////////
+
+    let amountToMoveBy = 0.0;
+
+    // timer - move box001 right
+    let timerMoveObject;
+    timerMoveObject = setInterval(function()
+    {
+        amountToMoveBy += 0.1;
+
+        // box001 moves by 0.1 in the -X direction, right
+        box001.position.x = -amountToMoveBy;
+
+    }, 20);
+
+    //////////////////////////
+
+    // create a material
+    let material001 = new BABYLON.StandardMaterial("material001", scene);
+
+    // set the color of material001
+    material001.diffuseColor = new BABYLON.Color3(0, 1, 1);
+
+    // apply material001 to box001
+    box001.material = material001;
+
+    //////////////////////////
+
+    // create a ground
+    let ground = BABYLON.MeshBuilder.CreateGround("ground",
+    {
+        width: 400.0,
+        height: 400.0
+    }, scene);
+
+    //////////////////////////
+
+    // create a material
+    let material002 = new BABYLON.StandardMaterial("material002", scene);
+
+    // set the color of material002
+    material002.diffuseColor = new BABYLON.Color3(0.4, 0.4, 0.4);
+
+    // apply material002 to the ground
+    ground.material = material002;
+
+    //////////////////////////
+
+    return scene;
+};
+
+//////////////////////////
+
+// activate the createScene function
+let scene = createScene();
+
+//////////////////////////
+
+// create the render loop to render the scene
+engine.runRenderLoop(function()
+{
+    scene.render();
+});
+
+//////////////////////////
+
+window.addEventListener("resize", function()
+{
+    // when browser and/or canvas resize happens
+    engine.resize();
+});
+
+</script>
 
 </body>
+
 </html>
